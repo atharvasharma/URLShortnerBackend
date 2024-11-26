@@ -1,8 +1,10 @@
 const express = require('express');
 const crypto = require('crypto');
 var cors = require('cors')
+require('dotenv').config()
 const app = express();
 const PORT = 8080;
+
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -41,7 +43,7 @@ app.post('/shorten', (req, res) => {
     if (ttl) {
       ttlMap.set(existingShortUrl[0], Date.now() + ttl * 1000);
     }
-    return res.json({ shortUrl: `http://localhost:${PORT}/${existingShortUrl[0]}` });
+    return res.json({ shortUrl: `${process.env.HOST_URL}/:${PORT}/${existingShortUrl[0]}` });
   }
 
   // Generate a new short URL
@@ -53,7 +55,7 @@ app.post('/shorten', (req, res) => {
     ttlMap.set(shortUrl, Date.now() + ttl * 1000);
   }
 
-  res.json({ shortUrl: `http://localhost:${PORT}/${shortUrl}` });
+  res.json({ shortUrl: `${process.env.HOST_URL}/:${PORT}/${shortUrl}` });
 });
 
 // API endpoint to retrieve the original URL
